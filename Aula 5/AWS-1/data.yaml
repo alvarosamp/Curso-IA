@@ -1,0 +1,13 @@
+names:
+- Floresta
+- Forest
+nc: 2
+roboflow:
+  license: CC BY 4.0
+  project: aws-ipxgf
+  url: https://universe.roboflow.com/alvaro-z5qmu/aws-ipxgf/dataset/1
+  version: 1
+  workspace: alvaro-z5qmu
+test: ../test/images
+train: ../train/images
+val: ../valid/images
