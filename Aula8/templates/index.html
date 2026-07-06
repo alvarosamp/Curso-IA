@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Trocar Modelo</title>
+</head>
+<body>
+    <h1>API com troca de modelo</h1>
+
+    <h2>Modelo atual</h2>
+
+    {% if modelo_atual %}
+        <p><strong>{{ modelo_atual }}</strong></p>
+    {% else %}
+        <p>Nenhum modelo carregado.</p>
+    {% endif %}
+
+    <hr>
+
+    <h2>Escolher modelo existente</h2>
+
+    <form action="/trocar-modelo" method="post">
+        <select name="nome_modelo">
+            {% for modelo in modelos %}
+                <option value="{{ modelo }}">{{ modelo }}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Trocar modelo</button>
+    </form>
+
+    <hr>
+
+    <h2>Enviar novo modelo</h2>
+
+    <form action="/upload-modelo" method="post" enctype="multipart/form-data">
+        <input type="file" name="arquivo" accept=".joblib">
+        <button type="submit">Enviar modelo</button>
+    </form>
+
+    <hr>
+
+    <h2>Teste de previsão</h2>
+
+    <p>Digite os valores separados por vírgula:</p>
+
+    <input id="valores" type="text" placeholder="Ex: 5.1, 3.5, 1.4, 0.2">
+    <button onclick="prever()">Prever</button>
+
+    <pre id="resultado"></pre>
+
+    <script>
+        async function prever() {
+            const texto = document.getElementById("valores").value;
+
+            const valores = texto
+                .split(",")
+                .map(v => parseFloat(v.trim()));
+
+            const resposta = await fetch("/prever", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    valores: valores
+                })
+            });
+
+            const dados = await resposta.json();
+
+            document.getElementById("resultado").textContent =
+                JSON.stringify(dados, null, 2);
+        }
+    </script>
+</body>
+</html>
